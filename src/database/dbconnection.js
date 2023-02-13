@@ -29,9 +29,13 @@ db.SubCategoria = require("../models/subCategoria.model")(sequelize);
 
 //asociations
 
-db.Categoria.hasOne(db.SubCategoria);
+db.Categoria.hasMany(db.SubCategoria);
 
 db.SubCategoria.belongsTo(db.Categoria);
+
+//db.Categoria.belongsTo(db.SubCategoria); //belongsTo
+//db.SubCategoria.hasOne(db.Categoria);
+
 
 db.sync = async () => {
 
