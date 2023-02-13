@@ -1,23 +1,23 @@
 const {Sequelize, DataTypes} = require('sequelize');
 
-const solicitud = (sequelize) => {
-    const solicitud = sequelize.define('solicitud', {
+const categoria = (sequelize) => {
+    const categoria = sequelize.define('categoria', {
             id: {
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
                 primaryKey: true
             },
-            estado: {
-                type: DataTypes.INTEGER,
-                defaultValue: 0
-            },
+            nombre: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            }
         },
         {
             freezeTableName: true
         });
 
-    return solicitud;
+    return categoria;
 }
 
-module.exports = solicitud;
+module.exports = categoria;
 
