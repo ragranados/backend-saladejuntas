@@ -1,10 +1,10 @@
 const {Sequelize, DataTypes} = require('sequelize');
 
 const subCategoria = (sequelize) => {
-    const subCategoria = sequelize.define('subCategoria', {
+    const subCategoria = sequelize.define('subCategory', {
             id: {
-                type: DataTypes.UUID,
-                defaultValue: DataTypes.UUIDV4,
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             nombre: {

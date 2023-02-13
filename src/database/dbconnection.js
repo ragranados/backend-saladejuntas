@@ -21,9 +21,17 @@ const db = {}
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+//instancias modelos
+
 db.Producto = require("../models/product.model")(sequelize);
 db.Categoria = require("../models/categoria.model")(sequelize);
 db.SubCategoria = require("../models/subCategoria.model")(sequelize);
+
+//asociations
+
+db.Categoria.hasOne(db.SubCategoria);
+
+db.SubCategoria.belongsTo(db.Categoria);
 
 db.sync = async () => {
 

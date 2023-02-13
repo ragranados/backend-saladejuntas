@@ -1,10 +1,10 @@
 const {Sequelize, DataTypes} = require('sequelize');
 
 const producto = (sequelize) => {
-    const producto = sequelize.define('producto', {
+    const producto = sequelize.define('product', {
             id: {
-                type: DataTypes.UUID,
-                defaultValue: DataTypes.UUIDV4,
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             nombre: {
