@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var db = require("./src/database/dbconnection");
 const fs = require('fs')
 var passport = require('passport');
+var cors = require("cors");
 var passportMiddleware = require('./src/middlewares/passportConfig');
 var {grantRoles} = require('./src/middlewares/grantRoles');
 
@@ -13,6 +14,7 @@ var indexRouter = require('./src/routes/index');
 var handlers = require("./src/middlewares/handlers");
 
 var app = express();
+app.use(cors());
 
 /*const accessLogStream = fs.createWriteStream(`${process.env.LOG_PATH ? process.env.LOG_PATH : __dirname}access.log`, {flags: 'a'})
 
