@@ -32,6 +32,9 @@ db.SubCategoria = require("../models/subCategoria.model")(sequelize);
 db.Categoria.hasMany(db.SubCategoria);
 
 db.SubCategoria.belongsTo(db.Categoria);
+db.SubCategoria.hasMany(db.Producto);
+
+db.Producto.belongsTo(db.SubCategoria);
 
 //db.Categoria.belongsTo(db.SubCategoria); //belongsTo
 //db.SubCategoria.hasOne(db.Categoria);

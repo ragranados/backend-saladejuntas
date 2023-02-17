@@ -4,6 +4,7 @@ var router = express.Router();
 var userRouter = require("./users.route");
 var categoriaRouter = require("./categoria.route");
 var authRouter = require("./auth.router");
+var productoRouter = require("./producto.route");
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -14,5 +15,6 @@ router.get('/', function (req, res, next) {
 router.use("/user", userRouter);
 router.use("/categoria", categoriaRouter);
 router.use("/auth", authRouter);
+router.use("/producto", productoRouter);
 
 module.exports = router;
