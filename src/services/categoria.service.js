@@ -10,7 +10,7 @@ const service = {};
 
 service.obtenerCategorias = async () => {
 
-    return ServiceResponse(true, await db.Categoria.findAll({include: [db.SubCategoria]}));
+    return ServiceResponse(true, await db.Categoria.findAll({include: [{model: db.SubCategoria, include: [db.Producto]}]}));
 
 }
 
