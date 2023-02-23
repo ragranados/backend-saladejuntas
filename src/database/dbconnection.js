@@ -26,6 +26,7 @@ db.Sequelize = Sequelize;
 db.Producto = require("../models/product.model")(sequelize);
 db.Categoria = require("../models/categoria.model")(sequelize);
 db.SubCategoria = require("../models/subCategoria.model")(sequelize);
+db.Mesa = require("../models/mesa.model")(sequelize);
 
 //asociations
 
