@@ -2,11 +2,6 @@ const {Sequelize, DataTypes} = require('sequelize');
 
 const itemOrden = (sequelize) => {
     const itemOrden = sequelize.define('orderItem', {
-            id: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
-            },
             nombre: {
                 type: DataTypes.STRING,
                 allowNull: false,
@@ -17,6 +12,7 @@ const itemOrden = (sequelize) => {
             }
         },
         {
+            timestamps: false,
             freezeTableName: true
         });
 
