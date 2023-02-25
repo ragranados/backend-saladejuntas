@@ -1,24 +1,27 @@
 const {Sequelize, DataTypes} = require('sequelize');
 
-const mesa = (sequelize) => {
-    const mesa = sequelize.define('mesa', {
+const itemOrden = (sequelize) => {
+    const itemOrden = sequelize.define('orderItem', {
             id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true
             },
-            libre: {
-                type: DataTypes.BOOLEAN,
+            nombre: {
+                type: DataTypes.STRING,
                 allowNull: false,
-                default: true
+            },
+            precio: {
+                type: DataTypes.DOUBLE,
+                allowNull: false,
             }
         },
         {
             freezeTableName: true
         });
 
-    return mesa;
+    return itemOrden;
 }
 
-module.exports = mesa;
+module.exports = itemOrden;
 

@@ -27,6 +27,7 @@ db.Producto = require("../models/product.model")(sequelize);
 db.Categoria = require("../models/categoria.model")(sequelize);
 db.SubCategoria = require("../models/subCategoria.model")(sequelize);
 db.Mesa = require("../models/mesa.model")(sequelize);
+db.ItemOrden = require("../models/itemOrden.model")(sequelize);
 
 //asociations
 
@@ -37,8 +38,6 @@ db.SubCategoria.hasMany(db.Producto);
 
 db.Producto.belongsTo(db.SubCategoria);
 
-//db.Categoria.belongsTo(db.SubCategoria); //belongsTo
-//db.SubCategoria.hasOne(db.Categoria);
 
 
 db.sync = async () => {
