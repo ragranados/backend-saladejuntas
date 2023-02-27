@@ -43,6 +43,9 @@ db.Producto.belongsTo(db.SubCategoria);
 db.Producto.belongsToMany(db.Orden, { through: db.ItemOrden });
 db.Orden.belongsToMany(db.Producto, { through: db.ItemOrden });
 
+db.Orden.belongsTo(db.Mesa);
+db.Mesa.hasOne(db.Orden);
+
 db.sync = async () => {
 
     //let alter = process.env.SYNCDB ? true : false;

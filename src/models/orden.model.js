@@ -7,6 +7,10 @@ const orden = (sequelize) => {
                 autoIncrement: true,
                 primaryKey: true
             },
+            metodoDePago: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
             total: {
                 type: DataTypes.DOUBLE,
                 allowNull: false,
