@@ -11,6 +11,10 @@ const producto = (sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
+            nombreEnFactura: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
             precio: {
                 type: DataTypes.DOUBLE,
                 allowNull: false,
