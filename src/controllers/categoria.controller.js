@@ -15,7 +15,7 @@ userController.obtenerCategorias = async (req, res, next) => {
         return res.status(200).json(ApiResponse(status, "Success", content));
 
     } catch (e) {
-        throw e;
+        next(e);
     }
 }
 

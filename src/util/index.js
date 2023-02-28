@@ -18,3 +18,20 @@ exports.eliminateAttrFromDoc = (attrArray, thisAttr) => {
 
     return modifiedDocument;
 }
+
+exports.ordenarItemsParaMostrar = (listaItems) => {
+
+    let arrayFinal = [];
+
+    const agrupados = listaItems.reduce((group, product) => {
+        const {id} = product;
+        group[id] = group[id] ?? [];
+        group[id].push(product);
+        return group;
+    }, {});
+
+    console.log("agrupados", agrupados);
+
+    return agrupados;
+
+}

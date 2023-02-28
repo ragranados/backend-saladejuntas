@@ -6,6 +6,7 @@ var categoriaRouter = require("./categoria.route");
 var authRouter = require("./auth.router");
 var productoRouter = require("./producto.route");
 var mesaRouter = require("./mesa.route");
+var ordenRouter = require("./orden.route");
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -18,5 +19,6 @@ router.use("/categoria", categoriaRouter);
 router.use("/auth", authRouter);
 router.use("/producto", productoRouter);
 router.use("/mesa", mesaRouter);
+router.use("/orden", ordenRouter);
 
 module.exports = router;

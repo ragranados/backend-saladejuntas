@@ -27,6 +27,7 @@ db.Producto = require("../models/product.model")(sequelize);
 db.Categoria = require("../models/categoria.model")(sequelize);
 db.SubCategoria = require("../models/subCategoria.model")(sequelize);
 db.Mesa = require("../models/mesa.model")(sequelize);
+db.MetodoPago = require("../models/metodoPago.model")(sequelize);
 
 db.ItemOrden = require("../models/itemOrden.model")(sequelize);
 db.Orden = require("../models/orden.model")(sequelize);
@@ -40,11 +41,20 @@ db.SubCategoria.hasMany(db.Producto);
 
 db.Producto.belongsTo(db.SubCategoria);
 
-db.Producto.belongsToMany(db.Orden, { through: db.ItemOrden });
-db.Orden.belongsToMany(db.Producto, { through: db.ItemOrden });
+db.Producto.belongsToMany(db.Orden, {through: db.ItemOrden});
+db.Orden.belongsToMany(db.Producto, {through: db.ItemOrden});
+
+db.Producto.hasMany(db.ItemOrden);
+db.ItemOrden.belongsTo(db.Producto);
+
+db.Orden.hasMany(db.ItemOrden);
+db.ItemOrden.belongsTo(db.Orden);
 
 db.Orden.belongsTo(db.Mesa);
 db.Mesa.hasOne(db.Orden);
+
+db.Orden.belongsTo(db.MetodoPago);
+db.MetodoPago.hasOne(db.Orden);
 
 db.sync = async () => {
 

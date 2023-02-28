@@ -17,7 +17,7 @@ userController.obtenerMesasPorEstado = async (req, res, next) => {
         return res.status(200).json(ApiResponse(status, "Success", content));
 
     } catch (e) {
-        throw e;
+        next(e);
     }
 }
 
@@ -32,7 +32,7 @@ userController.cambiarEstadoMesa = async (req, res, next) => {
         return res.status(200).json(ApiResponse(status, "Success", content));
 
     } catch (e) {
-        throw e;
+        next(e);
     }
 }
 

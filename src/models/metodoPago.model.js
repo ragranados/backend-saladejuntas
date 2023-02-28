@@ -1,26 +1,23 @@
 const {Sequelize, DataTypes} = require('sequelize');
 
-const orden = (sequelize) => {
-    const orden = sequelize.define('order', {
+const metodoPago = (sequelize) => {
+    const metodoPago = sequelize.define('metodoPago', {
             id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true
             },
-            total: {
-                type: DataTypes.DOUBLE,
-                allowNull: false,
-            },
-            estado: {
+            nombre: {
                 type: DataTypes.STRING,
+                allowNull: false,
             }
         },
         {
             freezeTableName: true
         });
 
-    return orden;
+    return metodoPago;
 }
 
-module.exports = orden;
+module.exports = metodoPago;
 
