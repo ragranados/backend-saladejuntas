@@ -21,8 +21,14 @@ INSERT INTO product(nombre,nombreEnFactura,subCategoryId,precio,createdAt, updat
 
 INSERT INTO metodoPago(nombre,createdAt, updatedAt) VALUES ("Efectivo","2017-06-15", "2017-06-15");
 INSERT INTO metodoPago(nombre,createdAt, updatedAt) VALUES ("Tarjeta","2017-06-15", "2017-06-15");
+INSERT INTO metodoPago(nombre,createdAt, updatedAt) VALUES ("Hibrido","2017-06-15", "2017-06-15");
 
 INSERT INTO mesa(libre,createdAt, updatedAt) VALUES (true,"2017-06-15", "2017-06-15");
+
+INSERT INTO orderStatus(nombre,createdAt, updatedAt) VALUES ("Activa","2017-06-15", "2017-06-15");
+
+#SET GLOBAL time_zone = '-6:00';
+#SET time_zone = '-06:00';
 
 SELECT * FROM category;
 SELECT * FROM subCategory;
@@ -31,3 +37,4 @@ SELECT * FROM metodoPago;
 SELECT * FROM mesa;
 SELECT * FROM saladejuntas.order;
 SELECT * FROM orderItem;
+SELECT * FROM orderStatus;
