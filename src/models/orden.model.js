@@ -11,9 +11,6 @@ const orden = (sequelize) => {
                 type: DataTypes.DOUBLE,
                 allowNull: false,
             },
-            estado: {
-                type: DataTypes.STRING,
-            }
         },
         {
             freezeTableName: true

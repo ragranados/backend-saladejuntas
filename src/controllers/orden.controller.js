@@ -21,10 +21,12 @@ ordenController.ingresarOrden = async (req, res, next) => {
     }
 }
 
-ordenController.obtenerOrdenesActivas = async (req, res, next) => {
+ordenController.obtenerOrdenesPorEstado = async (req, res, next) => {
     try {
 
-        const {status, content} = await ordenService.obtenerOrdenesActivas();
+        const {estadoId} = req.query;
+
+        const {status, content} = await ordenService.obtenerOrdenesPorEstado(estadoId);
 
         if (!status) {
             throw new Error("No");

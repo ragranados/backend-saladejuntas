@@ -17,7 +17,7 @@ router.post("/ingresar", ordenController.ingresarOrden);
 
 //read
 
-router.get("/todas", ordenController.obtenerOrdenesActivas);
+router.get("/porEstado", ordenController.obtenerOrdenesPorEstado);
 
 //update
 
