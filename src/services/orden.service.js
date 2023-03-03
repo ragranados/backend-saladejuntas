@@ -23,6 +23,7 @@ service.ingresarOrden = async (mesaId, metodoPagoId, items = []) => {
             mesaId,
             metodoPagoId,
             total: total,
+            orderStatusId: 1,
             estado: "activa"
 
         }, {transaction: t});
@@ -65,7 +66,7 @@ service.ingresarOrden = async (mesaId, metodoPagoId, items = []) => {
 service.obtenerOrdenesActivas = async () => {
     return ServiceResponse(true, await db.Orden.findAll({
         include: {model: db.ItemOrden, include: db.Producto},
-        where: {estado: "activaa"}
+        where: {estado: "activa"}
     }));
 }
 

@@ -28,6 +28,7 @@ db.Categoria = require("../models/categoria.model")(sequelize);
 db.SubCategoria = require("../models/subCategoria.model")(sequelize);
 db.Mesa = require("../models/mesa.model")(sequelize);
 db.MetodoPago = require("../models/metodoPago.model")(sequelize);
+db.EstadoOrden = require("../models/estadoOrden.model")(sequelize);
 
 db.ItemOrden = require("../models/itemOrden.model")(sequelize);
 db.Orden = require("../models/orden.model")(sequelize);
@@ -55,6 +56,9 @@ db.Mesa.hasOne(db.Orden);
 
 db.Orden.belongsTo(db.MetodoPago);
 db.MetodoPago.hasOne(db.Orden);
+
+db.Orden.belongsTo(db.EstadoOrden);
+db.EstadoOrden.hasOne(db.Orden);
 
 db.sync = async () => {
 
