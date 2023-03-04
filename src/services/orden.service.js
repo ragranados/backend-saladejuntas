@@ -62,6 +62,15 @@ service.ingresarOrden = async (mesaId, metodoPagoId, items = []) => {
 
 }
 
+service.agregarAOrden = async (idOrden, items) => {
+    const orden = await db.Orden.findByPk(idOrden, {include: [db.ItemOrden]});
+    const result = await db.sequelize.transaction(async (t) => {
+
+    })
+
+    return ServiceResponse(true, orden);
+}
+
 service.obtenerOrdenesPorEstado = async (estado) => {
     return ServiceResponse(true, await db.Orden.findAll({
         include: {model: db.ItemOrden, include: db.Producto},
