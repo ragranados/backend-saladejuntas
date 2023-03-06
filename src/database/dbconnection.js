@@ -8,7 +8,11 @@ const uri = process.env.DBURI || `mongodb://${dbhost}:${dbport}/${dbname}`
 const SYNCDB = process.env.SYNCDB ? true : false;
 
 const sequelize = new Sequelize(uri, {
-    logging: SYNCDB
+    logging: SYNCDB,
+    dialectOptions: {
+        useUTC: false, // for reading from database
+    },
+    timezone: '-06:00', // for writing to database
 });
 
 sequelize.authenticate(uri)

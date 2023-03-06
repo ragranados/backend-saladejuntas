@@ -30,7 +30,7 @@ exports.ordenarItemsParaMostrar = (listaItems) => {
         return group;
     }, {});
 
-    console.log("agrupados", agrupados);
+    //console.log("agrupados", agrupados);
 
     return agrupados;
 

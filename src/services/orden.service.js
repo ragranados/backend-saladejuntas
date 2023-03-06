@@ -64,11 +64,62 @@ service.ingresarOrden = async (mesaId, metodoPagoId, items = []) => {
 
 service.agregarAOrden = async (idOrden, items) => {
     const orden = await db.Orden.findByPk(idOrden, {include: [db.ItemOrden]});
+
     const result = await db.sequelize.transaction(async (t) => {
+
+        let itemsNuevosOrdenados = ordenarItemsParaMostrar(items);
+        let itemsNuevosOrdenadosId = Object.keys(itemsNuevosOrdenados);
+
+        let total = orden.total
+
+        for (let i = 0; i < itemsNuevosOrdenadosId.length; i++) {
+            const item = await db.ItemOrden.findOne({
+                where: {
+                    productId: itemsNuevosOrdenadosId[i],
+                    orderId: idOrden
+                }
+            });
+
+            if (item) {
+
+                let nuevaCantidadItems = item.cantidad;
+
+                for (let j = 0; j < itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length; j++) {
+                    let nItemOrdenado = itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]][j];
+                    total += nItemOrdenado.precio;
+                    nuevaCantidadItems++;
+                }
+
+                orden.total = total;
+                item.cantidad = nuevaCantidadItems;
+
+                await orden.save({transaction: t});
+                await item.save({transaction: t});
+
+            } else {
+
+                const itemActual = itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]][0];
+
+                const itemOrden = await db.ItemOrden.create({
+                    productId: itemActual.id,
+                    precio: itemActual.precio,
+                    orderId: orden.id,
+                    cantidad: itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length
+                }, {transaction: t});
+
+                let total = orden.total + itemActual.precio * itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length;
+
+                orden.total = total;
+
+                await orden.save({transaction: t});
+
+            }
+
+        }
 
     })
 
-    return ServiceResponse(true, orden);
+    return ServiceResponse(true, ordenarItemsParaMostrar(items));
 }
 
 service.obtenerOrdenesPorEstado = async (estado) => {

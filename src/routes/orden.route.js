@@ -21,6 +21,8 @@ router.get("/porEstado", ordenController.obtenerOrdenesPorEstado);
 
 //update
 
+router.put("/agregarAOrden", ordenController.agregarAOrden);
+
 //delete
 
 module.exports = router;
