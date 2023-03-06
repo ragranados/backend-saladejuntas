@@ -122,6 +122,20 @@ service.agregarAOrden = async (idOrden, items) => {
     return ServiceResponse(true, ordenarItemsParaMostrar(items));
 }
 
+service.cambiarEstadoOrden = async (ordenId, estado) => {
+
+    const orden = await db.Orden.findByPk(ordenId);
+
+    if (!orden) {
+        throw Error();
+    }
+
+    orden.orderStatusId = estado;
+    const nuevaOrden = await orden.save();
+
+    return ServiceResponse(true, nuevaOrden);
+}
+
 service.obtenerOrdenesPorEstado = async (estado) => {
     return ServiceResponse(true, await db.Orden.findAll({
         include: {model: db.ItemOrden, include: db.Producto},

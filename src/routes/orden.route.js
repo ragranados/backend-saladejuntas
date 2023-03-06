@@ -22,6 +22,7 @@ router.get("/porEstado", ordenController.obtenerOrdenesPorEstado);
 //update
 
 router.put("/agregarAOrden", ordenController.agregarAOrden);
+router.put("/cambiarEstado", ordenController.cambiarEstadoOrden);
 
 //delete
 
