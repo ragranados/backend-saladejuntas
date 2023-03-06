@@ -1,5 +1,5 @@
 class BaseError extends Error {
-    //TODO: Add or remove BaseError attributes as needed
+
     constructor(name, errorCode, statusCode, save, description) {
         super();
 

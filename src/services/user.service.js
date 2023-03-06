@@ -6,7 +6,6 @@ const Errors = require('../errors');
 
 const service = {};
 
-//TODO: Change user attributes
 service.save = async (username, email, password, role) => {
     const session = await mongoose.startSession();
 
@@ -19,7 +18,6 @@ service.save = async (username, email, password, role) => {
 
         const encrypted = await bcrypt.hash(password, 10);
 
-        //TODO: Change user attributes
         const newUser = new userModel({
             username,
             email,

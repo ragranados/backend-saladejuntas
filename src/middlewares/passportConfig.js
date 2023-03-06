@@ -2,7 +2,6 @@ const userService = require('../services/index').userService;
 var JwtStrategy = require('passport-jwt').Strategy;
 var {ExtractJwt} = require('passport-jwt');
 
-//TODO: Change Passport Config Ass Needed.
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.JWTSECRET;

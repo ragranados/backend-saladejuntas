@@ -1,4 +1,4 @@
-//TODO: Add or remove Status Codes as needed
+
 const httpStatusCodes = {
     OK: 200,
     BAD_CREDENTIALS: 401,

@@ -1,6 +1,5 @@
 const roles = require('../constants/roles');
 
-//TODO: Add or remove roles as needed
 /**
  *
  * @param req

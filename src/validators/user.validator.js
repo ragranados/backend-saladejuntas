@@ -3,8 +3,6 @@ const {check, param} = require("express-validator");
 
 const validator = {}
 
-//TODO: Add or remove fields ass you need
-
 validator.registerValidator = [
     check("username")
         .notEmpty().withMessage("username is requiered."),

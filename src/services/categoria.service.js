@@ -6,8 +6,6 @@ const Errors = require('../errors');
 
 const service = {};
 
-//TODO: Change user attributes
-
 service.obtenerCategorias = async () => {
 
     return ServiceResponse(true, await db.Categoria.findAll({include: [{model: db.SubCategoria, include: [db.Producto]}]}));

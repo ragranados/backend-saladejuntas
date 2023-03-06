@@ -7,7 +7,6 @@ const ordenController = require("./orden.controller");
 
 const controllers = {};
 
-//TODO: Add controllers as needed.
 controllers.authController = authController;
 controllers.categoriaController = categoriaController;
 controllers.userController = userController;

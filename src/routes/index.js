@@ -13,7 +13,6 @@ router.get('/', function (req, res, next) {
     res.render('index', {title: 'Express'});
 });
 
-//TODO: Add routers as needed.
 router.use("/user", userRouter);
 router.use("/categoria", categoriaRouter);
 router.use("/auth", authRouter);

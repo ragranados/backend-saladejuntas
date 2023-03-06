@@ -7,8 +7,6 @@ const {ordenarItemsParaMostrar} = require("../util/index");
 
 const service = {};
 
-//TODO: Change user attributes
-
 service.ingresarOrden = async (mesaId, metodoPagoId, items = []) => {
 
     const result = await db.sequelize.transaction(async (t) => {

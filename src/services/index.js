@@ -7,7 +7,6 @@ const ordenServices = require("./orden.service");
 
 const Services = {};
 
-//TODO: Add services as needed.
 Services.userService = userService;
 Services.categoriaService = categoriaService;
 Services.errorService = errorService;

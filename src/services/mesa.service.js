@@ -6,8 +6,6 @@ const Errors = require('../errors');
 
 const service = {};
 
-//TODO: Change user attributes
-
 service.obtenerMesasPorEstado = async (estado) => {
 
     return ServiceResponse(true, await db.Mesa.findAll({where: {libre: estado}}));
