@@ -136,6 +136,33 @@ service.cambiarEstadoOrden = async (ordenId, estado) => {
     return ServiceResponse(true, nuevaOrden);
 }
 
+service.cerrarOrden = async (ordenId) => {
+
+    const result = await db.sequelize.transaction(async (t) => {
+
+        const orden = await db.Orden.findByPk(ordenId);
+        console.log(orden.mesaId);
+
+        if (!orden) {
+            throw Error("No se encontró orden");
+        }
+
+        const mesa = await db.Mesa.findByPk(orden.mesaId);
+
+        if (!mesa) {
+            throw Error("No se encontró mesa");
+        }
+
+        orden.orderStatusId = 3;
+        mesa.libre = true;
+        const nuevaOrden = await orden.save({transaction: t});
+        await mesa.save({transaction: t})
+
+    });
+
+    return ServiceResponse(true, null);
+}
+
 service.obtenerOrdenesPorEstado = async (estado) => {
     return ServiceResponse(true, await db.Orden.findAll({
         include: {model: db.ItemOrden, include: db.Producto},
