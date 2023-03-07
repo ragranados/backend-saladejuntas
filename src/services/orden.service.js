@@ -134,7 +134,7 @@ service.cambiarEstadoOrden = async (ordenId, estado) => {
     return ServiceResponse(true, nuevaOrden);
 }
 
-service.cerrarOrden = async (ordenId) => {
+service.cerrarOrden = async (ordenId, metodoPagoId) => {
 
     const result = await db.sequelize.transaction(async (t) => {
 
@@ -152,6 +152,7 @@ service.cerrarOrden = async (ordenId) => {
         }
 
         orden.orderStatusId = 3;
+        orden.metodoPagoId = metodoPagoId;
         mesa.libre = true;
         const nuevaOrden = await orden.save({transaction: t});
         await mesa.save({transaction: t})
@@ -166,6 +167,10 @@ service.obtenerOrdenesPorEstado = async (estado) => {
         include: {model: db.ItemOrden, include: db.Producto},
         where: {orderStatusId: estado}
     }));
+}
+
+service.obtenerMetodosDePago = async () => {
+    return ServiceResponse(true, await db.MetodoPago.findAll());
 }
 
 module.exports = service;

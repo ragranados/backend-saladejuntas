@@ -18,6 +18,7 @@ router.post("/ingresar", ordenController.ingresarOrden);
 //read
 
 router.get("/porEstado", ordenController.obtenerOrdenesPorEstado);
+router.get("/metodosDePago", ordenController.obtenerMetodosDePago);
 
 //update
 
