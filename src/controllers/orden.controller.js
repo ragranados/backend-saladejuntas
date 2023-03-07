@@ -97,7 +97,6 @@ ordenController.obtenerMetodosDePago = async (req, res, next) => {
     }
 }
 
-//TODO Agregar metodo de pago
 //TODO Agregar logica de propinas
 
 module.exports = ordenController;
