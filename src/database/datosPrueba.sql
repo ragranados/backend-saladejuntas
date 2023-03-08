@@ -12,16 +12,16 @@ INSERT INTO subCategory(nombre, categoryId,createdAt, updatedAt) VALUES ("Extran
 INSERT INTO subCategory(nombre, categoryId,createdAt, updatedAt) VALUES ("Platos", 2,"2017-06-15", "2017-06-15");
 INSERT INTO subCategory(nombre, categoryId,createdAt, updatedAt) VALUES ("Individuales", 2,"2017-06-15", "2017-06-15");
 
-INSERT INTO product(nombre,nombreEnFactura,subCategoryId,precio,createdAt, updatedAt) VALUES ("Pilsener", "Cerveza Pilsener Pequeña",1,1.5,"2017-06-15", "2017-06-15");
-INSERT INTO product(nombre,nombreEnFactura,subCategoryId,precio,createdAt, updatedAt) VALUES ("Suprema", "Cerveza Suprema",1,1.5,"2017-06-15", "2017-06-15");
-INSERT INTO product(nombre,nombreEnFactura,subCategoryId,precio,createdAt, updatedAt) VALUES ("Golden", "Cerveza Golden",1,1.5,"2017-06-15", "2017-06-15");
-INSERT INTO product(nombre,nombreEnFactura,subCategoryId,precio,createdAt, updatedAt) VALUES ("Budlight", "Cerveza Budlight Normal",2,2.5,"2017-06-15", "2017-06-15");
+INSERT INTO product(nombre,nombreEnFactura,esBebida,subCategoryId,precio,createdAt, updatedAt) VALUES ("Pilsener", "Cerveza Pilsener Pequeña",true,1,1.5,"2017-06-15", "2017-06-15");
+INSERT INTO product(nombre,nombreEnFactura,esBebida,subCategoryId,precio,createdAt, updatedAt) VALUES ("Suprema", "Cerveza Suprema",true,1,1.5,"2017-06-15", "2017-06-15");
+INSERT INTO product(nombre,nombreEnFactura,esBebida,subCategoryId,precio,createdAt, updatedAt) VALUES ("Golden", "Cerveza Golden",true,1,1.5,"2017-06-15", "2017-06-15");
+INSERT INTO product(nombre,nombreEnFactura,esBebida,subCategoryId,precio,createdAt, updatedAt) VALUES ("Budlight", "Cerveza Budlight Normal",true,2,2.5,"2017-06-15", "2017-06-15");
 
-INSERT INTO product(nombre,nombreEnFactura,subCategoryId,precio,createdAt, updatedAt) VALUES ("Plato Grande", "Plato Grande bocas",3,20,"2017-06-15", "2017-06-15");
-INSERT INTO product(nombre,nombreEnFactura,subCategoryId,precio,createdAt, updatedAt) VALUES ("Plato Normal", "Plato Pequeño bocas" ,3,10,"2017-06-15", "2017-06-15");
+INSERT INTO product(nombre,nombreEnFactura,esBebida,subCategoryId,precio,createdAt, updatedAt) VALUES ("Plato Grande", "Plato Grande bocas",false,3,20,"2017-06-15", "2017-06-15");
+INSERT INTO product(nombre,nombreEnFactura,esBebida,subCategoryId,precio,createdAt, updatedAt) VALUES ("Plato Normal", "Plato Pequeño bocas",false,3,10,"2017-06-15", "2017-06-15");
 
-INSERT INTO product(nombre,nombreEnFactura,subCategoryId,precio,createdAt, updatedAt) VALUES ("Chicharrones", "Chicharrones",4,1.75,"2017-06-15", "2017-06-15");
-INSERT INTO product(nombre,nombreEnFactura,subCategoryId,precio,createdAt, updatedAt) VALUES ("Papas fritas", "Papas fritas" ,4,1.75,"2017-06-15", "2017-06-15");
+INSERT INTO product(nombre,nombreEnFactura,esBebida,subCategoryId,precio,createdAt, updatedAt) VALUES ("Chicharrones", "Chicharrones",false,4,1.75,"2017-06-15", "2017-06-15");
+INSERT INTO product(nombre,nombreEnFactura,esBebida,subCategoryId,precio,createdAt, updatedAt) VALUES ("Papas fritas", "Papas fritas",false ,4,1.75,"2017-06-15", "2017-06-15");
 
 INSERT INTO metodoPago(nombre,createdAt, updatedAt) VALUES ("Efectivo","2017-06-15", "2017-06-15");
 INSERT INTO metodoPago(nombre,createdAt, updatedAt) VALUES ("Tarjeta","2017-06-15", "2017-06-15");
