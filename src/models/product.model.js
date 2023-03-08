@@ -18,6 +18,10 @@ const producto = (sequelize) => {
             precio: {
                 type: DataTypes.DOUBLE,
                 allowNull: false,
+            },
+            esBebida: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
             }
         },
         {

@@ -20,7 +20,7 @@ service.ingresarOrden = async (mesaId, metodoPagoId, items = []) => {
         const orden = await db.Orden.create({
             mesaId,
             metodoPagoId,
-            total: total,
+            totalSinPropina: total,
             orderStatusId: 1,
 
         }, {transaction: t});
@@ -51,7 +51,7 @@ service.ingresarOrden = async (mesaId, metodoPagoId, items = []) => {
 
         }
 
-        orden.total = total;
+        orden.totalSinPropina = total;
 
         await orden.save({transaction: t});
     });
@@ -68,7 +68,7 @@ service.agregarAOrden = async (idOrden, items) => {
         let itemsNuevosOrdenados = ordenarItemsParaMostrar(items);
         let itemsNuevosOrdenadosId = Object.keys(itemsNuevosOrdenados);
 
-        let total = orden.total
+        let total = orden.totalSinPropina
 
         for (let i = 0; i < itemsNuevosOrdenadosId.length; i++) {
             const item = await db.ItemOrden.findOne({
@@ -88,7 +88,7 @@ service.agregarAOrden = async (idOrden, items) => {
                     nuevaCantidadItems++;
                 }
 
-                orden.total = total;
+                orden.totalSinPropina = total;
                 item.cantidad = nuevaCantidadItems;
 
                 await orden.save({transaction: t});
@@ -105,9 +105,9 @@ service.agregarAOrden = async (idOrden, items) => {
                     cantidad: itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length
                 }, {transaction: t});
 
-                let total = orden.total + itemActual.precio * itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length;
+                let total = orden.totalSinPropina + itemActual.precio * itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length;
 
-                orden.total = total;
+                orden.totalSinPropina = total;
 
                 await orden.save({transaction: t});
 
@@ -132,6 +132,23 @@ service.cambiarEstadoOrden = async (ordenId, estado) => {
     const nuevaOrden = await orden.save();
 
     return ServiceResponse(true, nuevaOrden);
+}
+
+service.preCerrarOrden = async (ordenId) => {
+    const result = await db.sequelize.transaction(async (t) => {
+
+        const orden = await db.Orden.findByPk(ordenId);
+
+        if (!orden) {
+            throw Error("No se encontró orden");
+        }
+
+        orden.orderStatusId = 2;
+        orden.propina = orden.totalSinPropina * 0.10;
+        orden.total = orden.propina + orden.totalSinPropina;
+        await orden.save();
+
+    })
 }
 
 service.cerrarOrden = async (ordenId, metodoPagoId) => {

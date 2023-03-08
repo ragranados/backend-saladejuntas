@@ -8,9 +8,20 @@ const orden = (sequelize) => {
                 primaryKey: true
             },
             total: {
-                type: DataTypes.DOUBLE,
-                allowNull: false,
+                type: DataTypes.DOUBLE(10,2),
+                allowNull: true,
+                default: 0.00
             },
+            propina: {
+                type: DataTypes.DOUBLE(10,2),
+                allowNull: true,
+                default: 0.00
+            },
+            totalSinPropina: {
+                type: DataTypes.DOUBLE(10,2),
+                allowNull: true,
+                default: 0.00
+            }
         },
         {
             freezeTableName: true

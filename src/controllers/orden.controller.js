@@ -49,6 +49,20 @@ ordenController.cambiarEstadoOrden = async (req, res, next) => {
     }
 }
 
+ordenController.preCerrarOrden = async (req, res, next) => {
+    try {
+
+        const {ordenId} = req.body;
+
+        const {status, content} = await ordenService.preCerrarOrden(ordenId);
+
+        return res.status(200).json(ApiResponse(status, "Success", content));
+
+    } catch (e) {
+        next(e);
+    }
+}
+
 ordenController.cerrarOrden = async (req, res, next) => {
     try {
 

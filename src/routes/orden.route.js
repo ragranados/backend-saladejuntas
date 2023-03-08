@@ -24,6 +24,7 @@ router.get("/metodosDePago", ordenController.obtenerMetodosDePago);
 
 router.put("/agregarAOrden", ordenController.agregarAOrden);
 router.put("/cambiarEstado", ordenController.cambiarEstadoOrden);
+router.put("/preCerrar", ordenController.preCerrarOrden);
 router.put("/cerrar", ordenController.cerrarOrden);
 
 //delete
