@@ -149,6 +149,8 @@ service.preCerrarOrden = async (ordenId) => {
         await orden.save();
 
     })
+
+    return ServiceResponse(true, null);
 }
 
 service.cerrarOrden = async (ordenId, metodoPagoId) => {
