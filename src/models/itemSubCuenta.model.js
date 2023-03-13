@@ -1,7 +1,7 @@
 const {Sequelize, DataTypes} = require('sequelize');
 
-const itemOrden = (sequelize) => {
-    const itemOrden = sequelize.define('orderItem', {
+const itemCuenta = (sequelize) => {
+    const itemCuenta = sequelize.define('subBillItem', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -22,8 +22,8 @@ const itemOrden = (sequelize) => {
             freezeTableName: true
         });
 
-    return itemOrden;
+    return itemCuenta;
 }
 
-module.exports = itemOrden;
+module.exports = itemCuenta;
 

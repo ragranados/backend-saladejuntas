@@ -1,24 +1,33 @@
 const {Sequelize, DataTypes} = require('sequelize');
 
-const orden = (sequelize) => {
-    const orden = sequelize.define('order', {
+const subCuenta = (sequelize) => {
+    const subCuenta = sequelize.define('subBill', {
             id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true
             },
             total: {
-                type: DataTypes.DOUBLE(10,2),
+                type: DataTypes.DOUBLE(10, 2),
                 allowNull: true,
                 default: 0.00
             },
             propina: {
-                type: DataTypes.DOUBLE(10,2),
+                type: DataTypes.DOUBLE(10, 2),
                 allowNull: true,
                 default: 0.00
             },
             totalSinPropina: {
-                type: DataTypes.DOUBLE(10,2),
+                type: DataTypes.DOUBLE(10, 2),
+                allowNull: true,
+                default: 0.00
+            },
+            nombre: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            totalPagado: {
+                type: DataTypes.DOUBLE(10, 2),
                 allowNull: true,
                 default: 0.00
             }
@@ -27,8 +36,8 @@ const orden = (sequelize) => {
             freezeTableName: true
         });
 
-    return orden;
+    return subCuenta;
 }
 
-module.exports = orden;
+module.exports = subCuenta;
 

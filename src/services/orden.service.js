@@ -11,13 +11,17 @@ service.ingresarOrden = async (mesaId, metodoPagoId, items = []) => {
 
     const result = await db.sequelize.transaction(async (t) => {
 
+        const cuenta = await db.Cuenta.create({
+
+        });
+
         let total = 0;
 
         const mesa = await db.Mesa.findByPk(mesaId);
         mesa.libre = false;
         await mesa.save({transaction: t});
 
-        const orden = await db.Orden.create({
+        const subCuenta = await db.SubCuenta.create({
             mesaId,
             metodoPagoId,
             totalSinPropina: total,
@@ -38,43 +42,43 @@ service.ingresarOrden = async (mesaId, metodoPagoId, items = []) => {
             console.log({
                 productId: itemActual.id,
                 precio: itemActual.precio,
-                orderId: orden.id,
+                billId: subCuenta.id,
                 cantidad: itemsAgrupados[itemsKeys[i]].length
             });
 
-            const itemOrden = await db.ItemOrden.create({
+            const itemOrden = await db.ItemSubCuenta.create({
                 productId: itemActual.id,
                 precio: itemActual.precio,
-                orderId: orden.id,
+                billId: subCuenta.id,
                 cantidad: itemsAgrupados[itemsKeys[i]].length
             }, {transaction: t});
 
         }
 
-        orden.totalSinPropina = total;
+        subCuenta.totalSinPropina = total;
 
-        await orden.save({transaction: t});
+        await subCuenta.save({transaction: t});
     });
 
     return ServiceResponse(true, null);
 
 }
 
-service.agregarAOrden = async (idOrden, items) => {
-    const orden = await db.Orden.findByPk(idOrden, {include: [db.ItemOrden]});
+service.agregarAOrden = async (idSubCuenta, items) => {
+    const subCuenta = await db.SubCuenta.findByPk(idSubCuenta, {include: [db.ItemSubCuenta]});
 
     const result = await db.sequelize.transaction(async (t) => {
 
         let itemsNuevosOrdenados = ordenarItemsParaMostrar(items);
         let itemsNuevosOrdenadosId = Object.keys(itemsNuevosOrdenados);
 
-        let total = orden.totalSinPropina
+        let total = subCuenta.totalSinPropina
 
         for (let i = 0; i < itemsNuevosOrdenadosId.length; i++) {
-            const item = await db.ItemOrden.findOne({
+            const item = await db.ItemSubCuenta.findOne({
                 where: {
                     productId: itemsNuevosOrdenadosId[i],
-                    orderId: idOrden
+                    subBillId: idSubCuenta
                 }
             });
 
@@ -88,28 +92,28 @@ service.agregarAOrden = async (idOrden, items) => {
                     nuevaCantidadItems++;
                 }
 
-                orden.totalSinPropina = total;
+                subCuenta.totalSinPropina = total;
                 item.cantidad = nuevaCantidadItems;
 
-                await orden.save({transaction: t});
+                await subCuenta.save({transaction: t});
                 await item.save({transaction: t});
 
             } else {
 
                 const itemActual = itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]][0];
 
-                const itemOrden = await db.ItemOrden.create({
+                const itemOrden = await db.ItemSubCuenta.create({
                     productId: itemActual.id,
                     precio: itemActual.precio,
-                    orderId: orden.id,
+                    orderId: subCuenta.id,
                     cantidad: itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length
                 }, {transaction: t});
 
-                let total = orden.totalSinPropina + itemActual.precio * itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length;
+                let total = subCuenta.totalSinPropina + itemActual.precio * itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length;
 
-                orden.totalSinPropina = total;
+                subCuenta.totalSinPropina = total;
 
-                await orden.save({transaction: t});
+                await subCuenta.save({transaction: t});
 
             }
 
@@ -120,60 +124,60 @@ service.agregarAOrden = async (idOrden, items) => {
     return ServiceResponse(true, ordenarItemsParaMostrar(items));
 }
 
-service.cambiarEstadoOrden = async (ordenId, estado) => {
+service.cambiarEstadoOrden = async (subCuentaId, estado) => {
 
-    const orden = await db.Orden.findByPk(ordenId);
+    const subCuenta = await db.SubCuenta.findByPk(subCuentaId);
 
-    if (!orden) {
+    if (!subCuenta) {
         throw Error();
     }
 
-    orden.orderStatusId = estado;
-    const nuevaOrden = await orden.save();
+    subCuenta.orderStatusId = estado;
+    const nuevaSubCuenta = await subCuenta.save();
 
-    return ServiceResponse(true, nuevaOrden);
+    return ServiceResponse(true, nuevaSubCuenta);
 }
 
-service.preCerrarOrden = async (ordenId) => {
+service.preCerrarOrden = async (subCuentaId) => {
     const result = await db.sequelize.transaction(async (t) => {
 
-        const orden = await db.Orden.findByPk(ordenId);
+        const subCuenta = await db.SubCuenta.findByPk(subCuentaId);
 
-        if (!orden) {
+        if (!subCuenta) {
             throw Error("No se encontró orden");
         }
 
-        orden.orderStatusId = 2;
-        orden.propina = orden.totalSinPropina * 0.10;
-        orden.total = orden.propina + orden.totalSinPropina;
-        await orden.save();
+        subCuenta.orderStatusId = 2;
+        subCuenta.propina = subCuenta.totalSinPropina * 0.10;
+        subCuenta.total = subCuenta.propina + subCuenta.totalSinPropina;
+        await subCuenta.save();
 
     })
 
     return ServiceResponse(true, null);
 }
 
-service.cerrarOrden = async (ordenId, metodoPagoId) => {
+service.cerrarOrden = async (subCuentaId, metodoPagoId) => {
 
     const result = await db.sequelize.transaction(async (t) => {
 
-        const orden = await db.Orden.findByPk(ordenId);
-        console.log(orden.mesaId);
+        const subCuenta = await db.SubCuenta.findByPk(subCuentaId);
+        console.log(subCuenta.mesaId);
 
-        if (!orden) {
+        if (!subCuenta) {
             throw Error("No se encontró orden");
         }
 
-        const mesa = await db.Mesa.findByPk(orden.mesaId);
+        const mesa = await db.Mesa.findByPk(subCuenta.mesaId);
 
         if (!mesa) {
             throw Error("No se encontró mesa");
         }
 
-        orden.orderStatusId = 3;
-        orden.metodoPagoId = metodoPagoId;
+        subCuenta.orderStatusId = 3;
+        subCuenta.metodoPagoId = metodoPagoId;
         mesa.libre = true;
-        const nuevaOrden = await orden.save({transaction: t});
+        const nuevaOrden = await subCuenta.save({transaction: t});
         await mesa.save({transaction: t})
 
     });
@@ -182,8 +186,8 @@ service.cerrarOrden = async (ordenId, metodoPagoId) => {
 }
 
 service.obtenerOrdenesPorEstado = async (estado) => {
-    return ServiceResponse(true, await db.Orden.findAll({
-        include: {model: db.ItemOrden, include: db.Producto},
+    return ServiceResponse(true, await db.SubCuenta.findAll({
+        include: {model: db.ItemSubCuenta, include: db.Producto},
         where: {orderStatusId: estado}
     }));
 }

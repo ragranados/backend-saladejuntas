@@ -34,8 +34,9 @@ db.Mesa = require("../models/mesa.model")(sequelize);
 db.MetodoPago = require("../models/metodoPago.model")(sequelize);
 db.EstadoOrden = require("../models/estadoOrden.model")(sequelize);
 
-db.ItemOrden = require("../models/itemOrden.model")(sequelize);
-db.Orden = require("../models/orden.model")(sequelize);
+db.ItemSubCuenta = require("../models/itemSubCuenta.model")(sequelize);
+db.SubCuenta = require("../models/subCuenta.model")(sequelize);
+db.Cuenta = require("../models/cuenta.model")(sequelize);
 
 //asociations
 
@@ -46,23 +47,29 @@ db.SubCategoria.hasMany(db.Producto);
 
 db.Producto.belongsTo(db.SubCategoria);
 
-db.Producto.belongsToMany(db.Orden, {through: db.ItemOrden});
-db.Orden.belongsToMany(db.Producto, {through: db.ItemOrden});
+db.Producto.belongsToMany(db.SubCuenta, {through: db.ItemSubCuenta});
+db.SubCuenta.belongsToMany(db.Producto, {through: db.ItemSubCuenta});
 
-db.Producto.hasMany(db.ItemOrden);
-db.ItemOrden.belongsTo(db.Producto);
+db.Producto.hasMany(db.ItemSubCuenta);
+db.ItemSubCuenta.belongsTo(db.Producto);
 
-db.Orden.hasMany(db.ItemOrden);
-db.ItemOrden.belongsTo(db.Orden);
+db.SubCuenta.hasMany(db.ItemSubCuenta);
+db.ItemSubCuenta.belongsTo(db.SubCuenta);
 
-db.Orden.belongsTo(db.Mesa);
-db.Mesa.hasOne(db.Orden);
+db.Cuenta.hasOne(db.Mesa);
+db.Mesa.belongsTo(db.Cuenta);
 
-db.Orden.belongsTo(db.MetodoPago);
-db.MetodoPago.hasOne(db.Orden);
+db.Cuenta.hasMany(db.SubCuenta);
+db.SubCuenta.belongsTo(db.Cuenta);
 
-db.Orden.belongsTo(db.EstadoOrden);
-db.EstadoOrden.hasOne(db.Orden);
+db.SubCuenta.belongsTo(db.MetodoPago);
+db.MetodoPago.hasOne(db.SubCuenta);
+
+db.SubCuenta.belongsTo(db.EstadoOrden);
+db.EstadoOrden.hasOne(db.SubCuenta);
+
+db.Cuenta.belongsTo(db.EstadoOrden);
+db.EstadoOrden.hasOne(db.Cuenta);
 
 db.sync = async () => {
 
