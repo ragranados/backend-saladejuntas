@@ -41,6 +41,6 @@ SELECT * FROM subCategory;
 SELECT * FROM product;
 SELECT * FROM metodoPago;
 SELECT * FROM mesa;
-SELECT * FROM saladejuntas.order;
-SELECT * FROM orderItem;
+SELECT * FROM saladejuntas.subBill;
+SELECT * FROM subbillItem;
 SELECT * FROM orderStatus;
