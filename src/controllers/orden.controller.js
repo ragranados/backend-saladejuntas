@@ -10,9 +10,9 @@ const ordenController = {}
 ordenController.ingresarOrden = async (req, res, next) => {
     try {
 
-        const {mesa, metodoPago, items} = req.body;
+        const {cuenta, mesa, metodoPago, items} = req.body;
 
-        const {status, content} = await ordenService.ingresarOrden(mesa, metodoPago, items);
+        const {status, content} = await ordenService.ingresarOrden(cuenta, mesa, metodoPago, items);
 
         return res.status(200).json(ApiResponse(status, "Success", content));
 
@@ -24,9 +24,9 @@ ordenController.ingresarOrden = async (req, res, next) => {
 ordenController.agregarAOrden = async (req, res, next) => {
     try {
 
-        const {ordenId, items} = req.body;
+        const {idCuenta, idSubCuenta, items} = req.body;
 
-        const {status, content} = await ordenService.agregarAOrden(ordenId, items);
+        const {status, content} = await ordenService.agregarAOrden(idCuenta, idSubCuenta, items);
 
         return res.status(200).json(ApiResponse(status, "Success", content));
 

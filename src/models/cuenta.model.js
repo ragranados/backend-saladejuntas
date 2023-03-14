@@ -7,6 +7,16 @@ const cuenta = (sequelize) => {
                 autoIncrement: true,
                 primaryKey: true
             },
+            totalSinPropina: {
+                type: DataTypes.DOUBLE(10, 2),
+                allowNull: true,
+                default: 0.00
+            },
+            total: {
+                type: DataTypes.DOUBLE(10, 2),
+                allowNull: true,
+                default: 0.00
+            },
         },
         {
             freezeTableName: true

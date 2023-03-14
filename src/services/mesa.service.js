@@ -8,7 +8,7 @@ const service = {};
 
 service.obtenerMesasPorEstado = async (estado) => {
 
-    return ServiceResponse(true, await db.Mesa.findAll({where: {libre: estado}}));
+    return ServiceResponse(true, await db.Mesa.findAll({where: {billId: null}}));
 
 }
 
