@@ -7,7 +7,7 @@ const {ordenarItemsParaMostrar} = require("../util/index");
 
 const service = {};
 
-service.ingresarOrden = async (cuentaId, mesaId, metodoPagoId, items = []) => {
+service.ingresarOrden = async (cuentaId, mesas, metodoPagoId, items = []) => {
 
     const result = await db.sequelize.transaction(async (t) => {
 
@@ -16,17 +16,20 @@ service.ingresarOrden = async (cuentaId, mesaId, metodoPagoId, items = []) => {
         if (cuentaId) {
             cuenta = await db.Cuenta.findByPk(cuentaId);
         } else {
-            cuenta = await db.Cuenta.create({orderStatusId: 1});
+            cuenta = await db.Cuenta.create({orderStatusId: 1}, {transaction: t});
         }
 
         let total = cuentaId ? cuenta.totalSinPropina : 0;
+        console.log(mesas);
 
-        const mesa = await db.Mesa.findByPk(mesaId);
-        mesa.libre = false;
-        await mesa.save({transaction: t});
+        for (let i = 0; i < mesas.length; i++) {
+            let mesa = await db.Mesa.findByPk(mesas[i]);
+
+            mesa.billId = cuenta.id;
+            await mesa.save({transaction: t});
+        }
 
         const subCuenta = await db.SubCuenta.create({
-            mesaId,
             metodoPagoId,
             totalSinPropina: total,
             orderStatusId: 1,
@@ -202,9 +205,9 @@ service.obtenerOrdenesPorEstado = async (estado) => {
     }));
 }
 
-service.obtenerSubCuentasPorEstado = async (estado) => {
+service.obtenerCuentasPorEstado = async (estado) => {
     return ServiceResponse(true, await db.Cuenta.findAll({
-        include: [{model: db.SubCuenta, include: [db.Producto]}],
+        include: [{model: db.Mesa}, {model: db.SubCuenta, include: [db.Producto]}],
         where: {orderStatusId: estado}
     }));
 }

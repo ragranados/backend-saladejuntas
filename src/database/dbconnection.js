@@ -56,7 +56,7 @@ db.ItemSubCuenta.belongsTo(db.Producto);
 db.SubCuenta.hasMany(db.ItemSubCuenta);
 db.ItemSubCuenta.belongsTo(db.SubCuenta);
 
-db.Cuenta.hasOne(db.Mesa);
+db.Cuenta.hasMany(db.Mesa);
 db.Mesa.belongsTo(db.Cuenta);
 
 db.Cuenta.hasMany(db.SubCuenta);
