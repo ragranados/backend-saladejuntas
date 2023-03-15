@@ -7,7 +7,7 @@ const {ordenarItemsParaMostrar} = require("../util/index");
 
 const service = {};
 
-service.ingresarOrden = async (cuentaId, mesas, metodoPagoId, items = []) => {
+service.ingresarOrden = async (cuentaId, nombre, mesas, metodoPagoId, items = []) => {
 
     const result = await db.sequelize.transaction(async (t) => {
 
@@ -23,7 +23,7 @@ service.ingresarOrden = async (cuentaId, mesas, metodoPagoId, items = []) => {
         let totalSubCuenta = 0
         console.log(mesas);
 
-        if(!cuentaId){
+        if (!cuentaId) {
             for (let i = 0; i < mesas.length; i++) {
                 let mesa = await db.Mesa.findByPk(mesas[i]);
 
@@ -37,6 +37,7 @@ service.ingresarOrden = async (cuentaId, mesas, metodoPagoId, items = []) => {
             totalSinPropina: total,
             orderStatusId: 1,
             billId: cuenta.id,
+            nombre
 
         }, {transaction: t});
 

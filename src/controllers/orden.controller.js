@@ -10,9 +10,9 @@ const ordenController = {}
 ordenController.ingresarOrden = async (req, res, next) => {
     try {
 
-        const {cuentaId, mesas, metodoPago, items} = req.body;
+        const {cuentaId, nombre, mesas, metodoPago, items} = req.body;
 
-        const {status, content} = await ordenService.ingresarOrden(cuentaId, mesas, metodoPago, items);
+        const {status, content} = await ordenService.ingresarOrden(cuentaId, nombre, mesas, metodoPago, items);
 
         return res.status(200).json(ApiResponse(status, "Success", content));
 
