@@ -24,9 +24,9 @@ ordenController.ingresarOrden = async (req, res, next) => {
 ordenController.agregarAOrden = async (req, res, next) => {
     try {
 
-        const {idCuenta, idSubCuenta, items} = req.body;
+        const {idSubCuenta, items} = req.body;
 
-        const {status, content} = await ordenService.agregarAOrden(idCuenta, idSubCuenta, items);
+        const {status, content} = await ordenService.agregarAOrden(idSubCuenta, items);
 
         return res.status(200).json(ApiResponse(status, "Success", content));
 
