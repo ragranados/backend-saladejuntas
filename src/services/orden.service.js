@@ -14,9 +14,19 @@ service.ingresarOrden = async (cuentaId, nombre, mesas, metodoPagoId, items = []
         let cuenta = null;
 
         if (cuentaId) {
+
+
             cuenta = await db.Cuenta.findByPk(cuentaId);
         } else {
-            cuenta = await db.Cuenta.create({orderStatusId: 1}, {transaction: t});
+            let mesasString = "";
+
+            mesas = mesas.sort();
+
+            for (let i = 0; i < mesas.length; i++) {
+                mesasString += mesas[i] + ",";
+            }
+
+            cuenta = await db.Cuenta.create({orderStatusId: 1, mesasLabel: mesasString}, {transaction: t});
         }
 
         let total = cuentaId ? cuenta.totalSinPropina : 0;
@@ -67,6 +77,7 @@ service.ingresarOrden = async (cuentaId, nombre, mesas, metodoPagoId, items = []
             }, {transaction: t});
 
         }
+
 
         subCuenta.totalSinPropina = totalSubCuenta;
         cuenta.totalSinPropina = total;
@@ -208,7 +219,7 @@ service.cerrarOrden = async (subCuentaId, metodoPagoId) => {
 
 service.obtenerOrdenesPorEstado = async (estado) => {
     return ServiceResponse(true, await db.SubCuenta.findAll({
-        include: {model: db.ItemSubCuenta, include: db.Producto},
+        include: [{model: db.ItemSubCuenta, include: db.Producto}, {model: db.Cuenta, include: db.Mesa}],
         where: {orderStatusId: estado}
     }));
 }

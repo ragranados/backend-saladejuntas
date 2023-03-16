@@ -17,6 +17,10 @@ const cuenta = (sequelize) => {
                 allowNull: true,
                 default: 0.00
             },
+            mesasLabel: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            }
         },
         {
             freezeTableName: true
