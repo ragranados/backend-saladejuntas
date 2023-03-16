@@ -10,7 +10,11 @@ const metodoPago = (sequelize) => {
             nombre: {
                 type: DataTypes.STRING,
                 allowNull: false,
-            }
+            },
+            codigo: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
         },
         {
             freezeTableName: true

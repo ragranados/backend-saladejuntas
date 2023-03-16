@@ -193,24 +193,51 @@ service.cerrarOrden = async (subCuentaId, metodoPagoId) => {
 
     const result = await db.sequelize.transaction(async (t) => {
 
+        let cerrarCuenta = true;
+
         const subCuenta = await db.SubCuenta.findByPk(subCuentaId);
-        console.log(subCuenta.mesaId);
 
         if (!subCuenta) {
             throw Error("No se encontró orden");
         }
 
-        const mesa = await db.Mesa.findByPk(subCuenta.mesaId);
-
-        if (!mesa) {
-            throw Error("No se encontró mesa");
-        }
-
         subCuenta.orderStatusId = 3;
         subCuenta.metodoPagoId = metodoPagoId;
-        mesa.libre = true;
+
         const nuevaOrden = await subCuenta.save({transaction: t});
-        await mesa.save({transaction: t})
+
+        const cuenta = await db.Cuenta.findByPk(subCuenta.billId, {
+            transaction: t,
+            include: [{model: db.Mesa}, {model: db.SubCuenta}]
+        });
+
+        if (!cuenta) {
+            throw Error("No se encontró orden padre");
+        }
+
+        for (let i = 0; i < cuenta.subBills.length; i++) {
+            console.log("XD",cuenta.subBills[i].orderStatusId);
+            if (cuenta.subBills[i].orderStatusId != 3) {
+                cerrarCuenta = false;
+            }
+        }
+
+        if (cerrarCuenta) {
+            cuenta.orderStatusId = 3;
+            await cuenta.save({transaction: t});
+
+            for (let i = 0; i < cuenta.mesas.length; i++) {
+                const mesa = await db.Mesa.findByPk(cuenta.mesas[i].id);
+
+                mesa.billId = null;
+
+                if (!mesa) {
+                    throw Error("No se encontró mesa");
+                }
+
+                await mesa.save({transaction: t});
+            }
+        }
 
     });
 
