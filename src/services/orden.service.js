@@ -7,26 +7,39 @@ const {ordenarItemsParaMostrar} = require("../util/index");
 
 const service = {};
 
-service.ingresarOrden = async (cuentaId, mesas, metodoPagoId, items = []) => {
+service.ingresarOrden = async (cuentaId, nombre, mesas, metodoPagoId, items = []) => {
 
     const result = await db.sequelize.transaction(async (t) => {
 
         let cuenta = null;
 
         if (cuentaId) {
+
+
             cuenta = await db.Cuenta.findByPk(cuentaId);
         } else {
-            cuenta = await db.Cuenta.create({orderStatusId: 1}, {transaction: t});
+            let mesasString = "";
+
+            mesas = mesas.sort();
+
+            for (let i = 0; i < mesas.length; i++) {
+                mesasString += mesas[i] + ",";
+            }
+
+            cuenta = await db.Cuenta.create({orderStatusId: 1, mesasLabel: mesasString}, {transaction: t});
         }
 
         let total = cuentaId ? cuenta.totalSinPropina : 0;
+        let totalSubCuenta = 0
         console.log(mesas);
 
-        for (let i = 0; i < mesas.length; i++) {
-            let mesa = await db.Mesa.findByPk(mesas[i]);
+        if (!cuentaId) {
+            for (let i = 0; i < mesas.length; i++) {
+                let mesa = await db.Mesa.findByPk(mesas[i]);
 
-            mesa.billId = cuenta.id;
-            await mesa.save({transaction: t});
+                mesa.billId = cuenta.id;
+                await mesa.save({transaction: t});
+            }
         }
 
         const subCuenta = await db.SubCuenta.create({
@@ -34,6 +47,7 @@ service.ingresarOrden = async (cuentaId, mesas, metodoPagoId, items = []) => {
             totalSinPropina: total,
             orderStatusId: 1,
             billId: cuenta.id,
+            nombre
 
         }, {transaction: t});
 
@@ -46,6 +60,7 @@ service.ingresarOrden = async (cuentaId, mesas, metodoPagoId, items = []) => {
             const itemActual = itemsAgrupados[itemsKeys[i]][0];
 
             total += itemActual.precio * itemsAgrupados[itemsKeys[i]].length;
+            totalSubCuenta += itemActual.precio * itemsAgrupados[itemsKeys[i]].length;
 
             console.log({
                 productId: itemActual.id,
@@ -63,7 +78,8 @@ service.ingresarOrden = async (cuentaId, mesas, metodoPagoId, items = []) => {
 
         }
 
-        subCuenta.totalSinPropina = total;
+
+        subCuenta.totalSinPropina = totalSubCuenta;
         cuenta.totalSinPropina = total;
 
         await subCuenta.save({transaction: t});
@@ -74,9 +90,9 @@ service.ingresarOrden = async (cuentaId, mesas, metodoPagoId, items = []) => {
 
 }
 
-service.agregarAOrden = async (idCuenta, idSubCuenta, items) => {
+service.agregarAOrden = async (idSubCuenta, items) => {
     const subCuenta = await db.SubCuenta.findByPk(idSubCuenta, {include: [db.ItemSubCuenta]});
-    const cuenta = await db.Cuenta.findByPk(idCuenta);
+    const cuenta = await db.Cuenta.findByPk(subCuenta.billId);
 
     const result = await db.sequelize.transaction(async (t) => {
 
@@ -94,17 +110,20 @@ service.agregarAOrden = async (idCuenta, idSubCuenta, items) => {
             });
 
             if (item) {
+                let totalLocal = 0;
 
                 let nuevaCantidadItems = item.cantidad;
 
                 for (let j = 0; j < itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length; j++) {
                     let nItemOrdenado = itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]][j];
-                    total += nItemOrdenado.precio;
+                    //total += nItemOrdenado.precio;
+                    totalLocal += nItemOrdenado.precio;
                     nuevaCantidadItems++;
                 }
 
-                subCuenta.totalSinPropina = total;
+                subCuenta.totalSinPropina += totalLocal;
                 item.cantidad = nuevaCantidadItems;
+                cuenta.totalSinPropina += totalLocal;
 
                 await subCuenta.save({transaction: t});
                 await item.save({transaction: t});
@@ -116,14 +135,14 @@ service.agregarAOrden = async (idCuenta, idSubCuenta, items) => {
                 const itemOrden = await db.ItemSubCuenta.create({
                     productId: itemActual.id,
                     precio: itemActual.precio,
-                    orderId: subCuenta.id,
+                    subBillId: subCuenta.id,
                     cantidad: itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length
                 }, {transaction: t});
 
-                let total = subCuenta.totalSinPropina + itemActual.precio * itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length;
+                let totalLocal = itemActual.precio * itemsNuevosOrdenados[itemsNuevosOrdenadosId[i]].length;
 
-                subCuenta.totalSinPropina = total;
-                cuenta.totalSinPropina = total;
+                subCuenta.totalSinPropina += totalLocal;
+                cuenta.totalSinPropina += totalLocal;
 
                 await subCuenta.save({transaction: t});
                 await cuenta.save({transaction: t});
@@ -200,7 +219,7 @@ service.cerrarOrden = async (subCuentaId, metodoPagoId) => {
 
 service.obtenerOrdenesPorEstado = async (estado) => {
     return ServiceResponse(true, await db.SubCuenta.findAll({
-        include: {model: db.ItemSubCuenta, include: db.Producto},
+        include: [{model: db.ItemSubCuenta, include: db.Producto}, {model: db.Cuenta, include: db.Mesa}],
         where: {orderStatusId: estado}
     }));
 }

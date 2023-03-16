@@ -25,6 +25,7 @@ const subCuenta = (sequelize) => {
             nombre: {
                 type: DataTypes.STRING,
                 allowNull: true,
+                default: "-",
             },
             totalPagado: {
                 type: DataTypes.DOUBLE(10, 2),

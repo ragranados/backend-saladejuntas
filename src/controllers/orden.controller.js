@@ -10,9 +10,9 @@ const ordenController = {}
 ordenController.ingresarOrden = async (req, res, next) => {
     try {
 
-        const {cuentaId, mesas, metodoPago, items} = req.body;
+        const {cuentaId, nombre, mesas, metodoPago, items} = req.body;
 
-        const {status, content} = await ordenService.ingresarOrden(cuentaId, mesas, metodoPago, items);
+        const {status, content} = await ordenService.ingresarOrden(cuentaId, nombre, mesas, metodoPago, items);
 
         return res.status(200).json(ApiResponse(status, "Success", content));
 
@@ -24,9 +24,9 @@ ordenController.ingresarOrden = async (req, res, next) => {
 ordenController.agregarAOrden = async (req, res, next) => {
     try {
 
-        const {idCuenta, idSubCuenta, items} = req.body;
+        const {idSubCuenta, items} = req.body;
 
-        const {status, content} = await ordenService.agregarAOrden(idCuenta, idSubCuenta, items);
+        const {status, content} = await ordenService.agregarAOrden(idSubCuenta, items);
 
         return res.status(200).json(ApiResponse(status, "Success", content));
 
@@ -52,9 +52,9 @@ ordenController.cambiarEstadoOrden = async (req, res, next) => {
 ordenController.preCerrarOrden = async (req, res, next) => {
     try {
 
-        const {ordenId} = req.body;
+        const {subCuentaId} = req.body;
 
-        const {status, content} = await ordenService.preCerrarOrden(ordenId);
+        const {status, content} = await ordenService.preCerrarOrden(subCuentaId);
 
         return res.status(200).json(ApiResponse(status, "Success", content));
 
@@ -83,6 +83,24 @@ ordenController.obtenerOrdenesPorEstado = async (req, res, next) => {
         const {estadoId} = req.query;
 
         const {status, content} = await ordenService.obtenerCuentasPorEstado(estadoId);
+
+        if (!status) {
+            throw new Error("No");
+        }
+
+        return res.status(200).json(ApiResponse(status, "Success", content));
+
+    } catch (e) {
+        next(e);
+    }
+}
+
+ordenController.obtenerSubCuentasPorEstado = async (req, res, next) => {
+    try {
+
+        const {estadoId} = req.query;
+
+        const {status, content} = await ordenService.obtenerOrdenesPorEstado(estadoId);
 
         if (!status) {
             throw new Error("No");
