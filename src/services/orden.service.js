@@ -127,6 +127,7 @@ service.agregarAOrden = async (idSubCuenta, items) => {
 
                 await subCuenta.save({transaction: t});
                 await item.save({transaction: t});
+                await cuenta.save({transaction: t});
 
             } else {
 
@@ -182,11 +183,13 @@ service.preCerrarOrden = async (subCuentaId) => {
         subCuenta.orderStatusId = 2;
         subCuenta.propina = subCuenta.totalSinPropina * 0.10;
         subCuenta.total = subCuenta.propina + subCuenta.totalSinPropina;
-        await subCuenta.save();
+        const nuevoResultado = await subCuenta.save({transaction: t});
+
+        return nuevoResultado;
 
     })
 
-    return ServiceResponse(true, null);
+    return ServiceResponse(true, result);
 }
 
 service.cerrarOrden = async (subCuentaId, metodoPagoId) => {
