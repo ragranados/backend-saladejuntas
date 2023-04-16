@@ -66,9 +66,9 @@ ordenController.preCerrarOrden = async (req, res, next) => {
 ordenController.cerrarOrden = async (req, res, next) => {
     try {
 
-        const {ordenId, metodoPagoId} = req.body;
+        const {ordenId, metodoPagoId, anular} = req.body;
 
-        const {status, content} = await ordenService.cerrarOrden(ordenId, metodoPagoId);
+        const {status, content} = await ordenService.cerrarOrden(ordenId, metodoPagoId, anular);
 
         return res.status(200).json(ApiResponse(status, "Success", content));
 

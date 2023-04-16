@@ -26,7 +26,11 @@ service.ingresarOrden = async (cuentaId, nombre, mesas, metodoPagoId, items = []
                 mesasString += mesas[i] + ",";
             }
 
-            cuenta = await db.Cuenta.create({orderStatusId: 1, mesasLabel: mesasString}, {transaction: t});
+            cuenta = await db.Cuenta.create({
+                orderStatusId: 1,
+                mesasLabel: mesasString,
+                anulada: false
+            }, {transaction: t});
         }
 
         let total = cuentaId ? cuenta.totalSinPropina : 0;
@@ -192,7 +196,7 @@ service.preCerrarOrden = async (subCuentaId) => {
     return ServiceResponse(true, result);
 }
 
-service.cerrarOrden = async (subCuentaId, metodoPagoId) => {
+service.cerrarOrden = async (subCuentaId, metodoPagoId, anular) => {
 
     const result = await db.sequelize.transaction(async (t) => {
 
@@ -219,7 +223,7 @@ service.cerrarOrden = async (subCuentaId, metodoPagoId) => {
         }
 
         for (let i = 0; i < cuenta.subBills.length; i++) {
-            console.log("XD",cuenta.subBills[i].orderStatusId);
+            console.log("XD", cuenta.subBills[i].orderStatusId);
             if (cuenta.subBills[i].orderStatusId != 3) {
                 cerrarCuenta = false;
             }
@@ -227,6 +231,7 @@ service.cerrarOrden = async (subCuentaId, metodoPagoId) => {
 
         if (cerrarCuenta) {
             cuenta.orderStatusId = 3;
+            cuenta.anulada = anular;
             await cuenta.save({transaction: t});
 
             for (let i = 0; i < cuenta.mesas.length; i++) {

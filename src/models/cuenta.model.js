@@ -20,6 +20,11 @@ const cuenta = (sequelize) => {
             mesasLabel: {
                 type: DataTypes.STRING,
                 allowNull: false,
+            },
+            anulada: {
+                type: DataTypes.BOOLEAN,
+                defualt: false,
+                allowNull: false,
             }
         },
         {
