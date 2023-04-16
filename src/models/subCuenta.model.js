@@ -31,6 +31,11 @@ const subCuenta = (sequelize) => {
                 type: DataTypes.DOUBLE(10, 2),
                 allowNull: true,
                 default: 0.00
+            },
+            anulada: {
+                type: DataTypes.BOOLEAN,
+                defualt: false,
+                allowNull: false,
             }
         },
         {

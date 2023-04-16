@@ -51,7 +51,8 @@ service.ingresarOrden = async (cuentaId, nombre, mesas, metodoPagoId, items = []
             totalSinPropina: total,
             orderStatusId: 1,
             billId: cuenta.id,
-            nombre
+            nombre,
+            anulada: false,
 
         }, {transaction: t});
 
@@ -210,6 +211,7 @@ service.cerrarOrden = async (subCuentaId, metodoPagoId, anular) => {
 
         subCuenta.orderStatusId = 3;
         subCuenta.metodoPagoId = metodoPagoId;
+        subCuenta.anulada = anular;
 
         const nuevaOrden = await subCuenta.save({transaction: t});
 
